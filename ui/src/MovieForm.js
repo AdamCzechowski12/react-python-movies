@@ -6,6 +6,8 @@ export default function MovieForm(props) {
     const [director, setDirector] = useState('');
     const [description, setDescription] = useState('');
 
+
+
     function addMovie(event) {
         event.preventDefault();
         if (title.length < 5) {
