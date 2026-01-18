@@ -10,45 +10,43 @@ function App() {
 
     useEffect(() => {
 
-    const fetchMovies = async () => {
+        const fetchMovies = async () => {
+            const response = await fetch(`/movies`);
+            if (response.ok) {
+                const movies = await response.json();
+                setMovies(movies);
+            }
+        };
 
-        const response = await fetch(`/movies`);
+        fetchMovies();
+
+    }, []);
+
+    async function handleAddMovie(movie) {
+
+        const response = await fetch('/movies', {
+            method: 'POST',
+            body: JSON.stringify(movie),
+            headers: {'Content-Type': 'application/json'}
+        });
 
         if (response.ok) {
+            setMovies([...movies, movie]);
+            setAddingMovie(false);
+        }
+    }
+    async function handleDeleteMovie(movie) {
+            const url = '/movies/' + movie.id;
+            const response = await fetch(url, {method: 'DELETE',});
+            if (response.ok) {
+                const nextMovies = movies.filter(m => m !== movie);
+                setMovies(nextMovies);
 
-            const movies = await response.json();
 
-            setMovies(movies);
-
+            }
         }
 
-    };
 
-    fetchMovies();
-
-}, []);
-
-   async function handleAddMovie(movie) {
-
-  const response = await fetch('/movies', {
-
-    method: 'POST',
-
-    body: JSON.stringify(movie),
-
-    headers: { 'Content-Type': 'application/json' }
-
-  });
-
-  if (response.ok) {
-
-    setMovies([...movies, movie]);
-
-    setAddingMovie(false);
-
-  }
-
-}
 
     return (
         <div className="container">
@@ -56,7 +54,7 @@ function App() {
             {movies.length === 0
                 ? <p>No movies yet. Maybe add something?</p>
                 : <MoviesList movies={movies}
-                              onDeleteMovie={(movie) => setMovies(movies.filter(m => m !== movie))}
+                              onDeleteMovie={handleDeleteMovie}
                 />}
             {addingMovie
                 ? <MovieForm onMovieSubmit={handleAddMovie}
@@ -66,5 +64,6 @@ function App() {
         </div>
     );
 }
+
 
 export default App;
