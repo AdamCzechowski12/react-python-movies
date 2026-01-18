@@ -31,22 +31,20 @@ function App() {
         });
 
         if (response.ok) {
+              const addingResponse = await response.json();
+                movie.id = addingResponse.id;
             setMovies([...movies, movie]);
             setAddingMovie(false);
         }
     }
     async function handleDeleteMovie(movie) {
             const url = '/movies/' + movie.id;
-            const response = await fetch(url, {method: 'DELETE',});
+            const response = await fetch(url, {method: 'DELETE'});
             if (response.ok) {
                 const nextMovies = movies.filter(m => m !== movie);
                 setMovies(nextMovies);
-
-
             }
         }
-
-
 
     return (
         <div className="container">

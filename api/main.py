@@ -45,7 +45,8 @@ def add_movie(movie: Movie):
     cursor = db.cursor()
     cursor.execute(f"INSERT INTO movies (title, year) VALUES ('{movie.title}', '{movie.year}')")
     db.commit()
-    return {"message": f"Movie with id = {cursor.lastrowid} added successfully"}
+    return {"message": f"Movie with id = {cursor.lastrowid} added successfully",
+    "id": cursor.lastrowid}
     # movie = models.Movie.create(**movie.dict())
     # return movie
 
